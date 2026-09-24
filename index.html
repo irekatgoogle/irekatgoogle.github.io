@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50 text-slate-900">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Autofill Next Gen</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+    /* Preserve native HTML5 :user-invalid behavior with bright vibe-coded styling */
+    input:user-invalid,
+    textarea:user-invalid,
+    select:user-invalid {
+      border-color: #f43f5e !important;
+      background-color: #fff1f2 !important;
+      box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15) !important;
+    }
+
+    input:user-valid,
+    textarea:user-valid {
+      border-color: #10b981 !important;
+      background-color: #ecfdf5 !important;
+    }
+
+    [contenteditable]:focus {
+      outline: none;
+    }
+
+    [contenteditable]:empty:before {
+      content: attr(data-placeholder);
+      color: #94a3b8;
+      pointer-events: none;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col antialiased bg-gradient-to-br from-sky-50 via-white to-indigo-50 text-slate-800">
+
+  <!-- Sticky Vibe-Coded Header (Bright Mode) -->
+  <header class="border-b border-indigo-100 bg-white/80 backdrop-blur-md px-6 py-4 sticky top-0 z-30 flex flex-wrap items-center justify-between gap-4 shadow-sm">
+    <div class="flex items-center space-x-3">
+      <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-sky-500 border border-indigo-400/30 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-indigo-500/20">
+        ⚡
+      </div>
+      <div>
+        <h1 class="text-lg font-bold text-slate-900 tracking-tight flex items-center flex-wrap gap-2">
+          Autofill Next Gen
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300 font-mono font-semibold">
+            Native Validation
+          </span>
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-700 border border-sky-300 font-mono font-semibold">
+            Contenteditable
+          </span>
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 border border-indigo-300 font-mono font-semibold">
+            Enhanced Autofill
+          </span>
+        </h1>
+        <p class="text-xs text-slate-500 mt-0.5">
+          Autofill Test Drive
+        </p>
+      </div>
+    </div>
+    <div class="flex items-center space-x-3">
+      <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1.5 shadow-2xs">
+        <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+        Live Constraints Active
+      </span>
+      <button type="button" onclick="window.location.href = window.location.pathname" class="text-xs bg-white hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 px-3.5 py-1.5 rounded-lg border border-slate-200 hover:border-indigo-200 transition flex items-center gap-1.5 font-medium shadow-2xs cursor-pointer">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        Reset Page
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content: Stacked Cards (Increased width to max-w-4xl, max 2 columns per row) -->
+  <main class="flex-1 p-6 space-y-6 max-w-4xl mx-auto w-full">
+
+    <!-- 1. Chat Card (First) -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-600 text-base font-bold">
+            💬
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Chat</h2>
+            <p class="text-xs text-slate-500">Multi-surface chat inputs &amp; <code class="font-mono text-sky-700">contenteditable</code></p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+          Chat Form
+        </span>
+      </div>
+
+      <!-- Chat Conversation Preview Bubble -->
+      <div id="chatLog" class="mb-4 p-3.5 rounded-xl bg-sky-50/40 border border-sky-100 space-y-2.5 max-h-48 overflow-y-auto">
+        <div class="flex items-start gap-2.5">
+          <span class="h-6 w-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center font-bold shrink-0">AI</span>
+          <div class="bg-white border border-slate-200 rounded-xl rounded-tl-none px-3 py-2 text-xs text-slate-700 shadow-2xs">
+            Use any of the three chat surfaces below (<code class="font-mono text-sky-700">textarea[name="query"]</code>, <code class="font-mono text-sky-700">input[type="text"]</code>, or <code class="font-mono text-sky-700">div[contenteditable]</code>) to test autofill &amp; rich text entry.
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <!-- 1. Textarea name="query" -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="chatQueryTextarea" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+              Query Textarea:
+            </label>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">textarea[name="query"]</span>
+          </div>
+          <textarea
+            id="chatQueryTextarea"
+            name="query"
+            rows="3"
+            placeholder="Type your chat query in textarea..."
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+          ></textarea>
+        </div>
+
+        <!-- 2. Input type="text" -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="chatTextInput" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+              Quick Chat Input:
+            </label>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">input[type="text"]</span>
+          </div>
+          <input
+            id="chatTextInput"
+            type="text"
+            placeholder="Single-line chat input..."
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+          />
+        </div>
+
+        <!-- 3. Contenteditable div (default empty) -->
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+              Rich Contenteditable Composer:
+            </span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">div[contenteditable=""]</span>
+          </div>
+          <div
+            id="chatContenteditable"
+            contenteditable=""
+            data-placeholder="Type rich content here..."
+            class="w-full min-h-[5.5rem] rounded-xl border-2 border-dashed border-sky-300 hover:border-sky-400 bg-sky-50/30 px-3.5 py-2.5 text-sm text-slate-900 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition cursor-text"
+          ></div>
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="button"
+            id="sendChatBtn"
+            class="w-full py-2.5 px-5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-semibold text-sm shadow-md shadow-sky-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Send to Chat</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Pure HTML5 Validation Form Card -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-indigo-100 border border-indigo-200 flex items-center justify-center text-indigo-600 text-base font-bold">
+            📋
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Pure HTML5 Validation Form</h2>
+            <p class="text-xs text-slate-500">Submits to same page (<code class="font-mono text-indigo-600">action="?"</code>) without <code class="font-mono text-rose-600">novalidate</code></p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
+          form[action="?"]
+        </span>
+      </div>
+
+      <!-- Notice: No 'novalidate' attribute -->
+      <form action="?" class="space-y-4">
+
+        <!-- Notes -->
+        <div class="form-group flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="notes" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Notes</label>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200 shrink-0">textarea#notes (optional)</span>
+          </div>
+          <textarea
+            id="notes"
+            name="notes"
+            rows="4"
+            placeholder="Add any supplemental notes or context here..."
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition resize-y min-h-[5rem]"
+          ></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Name (8 Chars/Digits Max) -->
+          <div class="form-group flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="name" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Name <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">maxlength="8"</span>
+            </div>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              maxlength="8"
+              placeholder="Max 8 chars"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <!-- Account Number (8 Digits Only) -->
+          <div class="form-group flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="accountNumber" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Account Number (8 Digits) <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">pattern="\d{8}"</span>
+            </div>
+            <input
+              type="number"
+              id="accountNumber"
+              name="accountNumber"
+              pattern="\d{8}"
+              inputmode="numeric"
+              maxlength="8"
+              placeholder="12345678"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- Number Range: Age (18-120) -->
+          <div class="form-group flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="age" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Age (18–120) <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">18..120</span>
+            </div>
+            <input
+              type="number"
+              id="age"
+              name="age"
+              min="18"
+              max="120"
+              step="1"
+              placeholder="25"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <!-- Valid Email -->
+          <div class="form-group flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="email" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Email <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">type="email"</span>
+            </div>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="user@example.com"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <!-- Date Picker -->
+        <div class="form-group flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="date" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+              Date <span class="text-rose-500">*</span>
+            </label>
+            <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 shrink-0">min="2026-01-01"</span>
+          </div>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            min="2026-01-01"
+            required
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 focus:border-indigo-500 focus:bg-white focus:ring-3 focus:ring-indigo-500/15 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            formaction="?"
+            class="w-full py-3 px-5 rounded-xl bg-gradient-to-r from-indigo-600 via-blue-600 to-sky-500 hover:from-indigo-500 hover:via-blue-500 hover:to-sky-400 text-white font-semibold text-sm shadow-md shadow-indigo-500/20 hover:shadow-lg hover:shadow-indigo-500/30 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 3. Profile Autofill Card -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-600 text-base font-bold">
+            🏠
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Profile Autofill</h2>
+            <p class="text-xs text-slate-500">Address &amp; contact profile fields (<code class="font-mono text-emerald-600">name</code>, <code class="font-mono text-emerald-600">address</code>, <code class="font-mono text-emerald-600">city</code>, <code class="font-mono text-emerald-600">zip</code>, <code class="font-mono text-emerald-600">email</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+          form#form1
+        </span>
+      </div>
+
+      <form name="addr1.1" id="form1" action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="profile_name" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Name</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">name="name"</span>
+            </div>
+            <input
+              type="text"
+              name="name"
+              id="profile_name"
+              placeholder="Name"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-3 focus:ring-emerald-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="form_email" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Email</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">name="email"</span>
+            </div>
+            <input
+              type="email"
+              name="email"
+              id="form_email"
+              placeholder="Email"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-3 focus:ring-emerald-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="profile_address" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Address</label>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">name="address"</span>
+          </div>
+          <input
+            type="text"
+            name="address"
+            id="profile_address"
+            placeholder="Address"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-3 focus:ring-emerald-500/15 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="profile_city" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">City</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">name="city"</span>
+            </div>
+            <input
+              type="text"
+              name="city"
+              id="profile_city"
+              placeholder="City"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-3 focus:ring-emerald-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="form_zip" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Zip</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0">name="zip"</span>
+            </div>
+            <input
+              type="text"
+              name="zip"
+              id="form_zip"
+              placeholder="Zip"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-emerald-500 focus:bg-white focus:ring-3 focus:ring-emerald-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center gap-3">
+          <input
+            type="reset"
+            value="Reset"
+            class="px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition cursor-pointer"
+          />
+          <button
+            type="submit"
+            id="profile_submit"
+            formaction="?"
+            class="flex-1 py-2.5 px-5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-semibold text-sm shadow-md shadow-emerald-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit Profile</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 4. Credit Card Autofill Card -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-amber-100 border border-amber-200 flex items-center justify-center text-amber-600 text-base font-bold">
+            💳
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Credit Card autofill</h2>
+            <p class="text-xs text-slate-500">Payment card details (<code class="font-mono text-amber-700">name</code>, <code class="font-mono text-amber-700">CCNo</code>, <code class="font-mono text-amber-700">CCExpiresMonth</code>, <code class="font-mono text-amber-700">CCExpiresYear</code>, <code class="font-mono text-amber-700">cvc</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200">
+          form#cc1
+        </span>
+      </div>
+
+      <form name="cc1.1" id="cc1" action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="credit_card_name" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Name on card</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">name="name"</span>
+            </div>
+            <input
+              type="text"
+              name="name"
+              id="credit_card_name"
+              placeholder="Name on card"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:bg-white focus:ring-3 focus:ring-amber-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="credit_card_number" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Credit card number</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">name="CCNo"</span>
+            </div>
+            <input
+              type="text"
+              name="CCNo"
+              id="credit_card_number"
+              placeholder="4408-0412-3456-7893"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:bg-white focus:ring-3 focus:ring-amber-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="CCExpiresMonth" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Expiry Month</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">CCExpiresMonth</span>
+            </div>
+            <select
+              name="CCExpiresMonth"
+              id="CCExpiresMonth"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 focus:border-amber-500 focus:bg-white focus:ring-3 focus:ring-amber-500/15 focus:outline-none transition"
+            >
+              <option value="">MM</option>
+              <option value="01">01</option>
+              <option value="02">02</option>
+              <option value="03">03</option>
+              <option value="04">04</option>
+              <option value="05">05</option>
+              <option value="06">06</option>
+              <option value="07">07</option>
+              <option value="08">08</option>
+              <option value="09">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="CCExpiresYear" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Expiry Year</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">CCExpiresYear</span>
+            </div>
+            <select
+              name="CCExpiresYear"
+              id="CCExpiresYear"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 focus:border-amber-500 focus:bg-white focus:ring-3 focus:ring-amber-500/15 focus:outline-none transition"
+            >
+              <option value="">YYYY</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+              <option value="2031">2031</option>
+              <option value="2032">2032</option>
+              <option value="2033">2033</option>
+              <option value="2034">2034</option>
+              <option value="2035">2035</option>
+              <option value="2036">2036</option>
+              <option value="2037">2037</option>
+              <option value="2038">2038</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="credit_card_cvc" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">CVC</label>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200 shrink-0">name="cvc"</span>
+          </div>
+          <input
+            type="text"
+            name="cvc"
+            id="credit_card_cvc"
+            placeholder="CVC"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:bg-white focus:ring-3 focus:ring-amber-500/15 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="pt-2 flex items-center gap-3">
+          <input
+            type="reset"
+            value="Reset"
+            class="px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition cursor-pointer"
+          />
+          <button
+            type="submit"
+            id="credit_card_submit"
+            formaction="?"
+            class="flex-1 py-2.5 px-5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white font-semibold text-sm shadow-md shadow-amber-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit Credit Card</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 5. Username/Password Sign-In Card -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center text-rose-600 text-base font-bold">
+            🔐
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Username/Password</h2>
+            <p class="text-xs text-slate-500">Account sign-in credentials (<code class="font-mono text-rose-600">username</code> &amp; <code class="font-mono text-rose-600">password</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-rose-50 text-rose-700 border border-rose-200">
+          form#np1
+        </span>
+      </div>
+
+      <form name="np" id="np1" action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="password_name" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Username</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 shrink-0">name="username"</span>
+            </div>
+            <input
+              type="text"
+              name="username"
+              id="password_name"
+              autocomplete="username"
+              placeholder="Username"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-rose-500 focus:bg-white focus:ring-3 focus:ring-rose-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="password_field" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Password</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-50 text-rose-700 border border-rose-200 shrink-0">type="password"</span>
+            </div>
+            <input
+              type="password"
+              name="password"
+              id="password_field"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-rose-500 focus:bg-white focus:ring-3 focus:ring-rose-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center gap-3">
+          <input
+            type="reset"
+            value="Reset"
+            class="px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs transition cursor-pointer"
+          />
+          <button
+            type="submit"
+            id="password_submit"
+            formaction="?"
+            class="flex-1 py-2.5 px-5 rounded-xl bg-gradient-to-r from-rose-600 to-pink-500 hover:from-rose-500 hover:to-pink-400 text-white font-semibold text-sm shadow-md shadow-rose-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Sign In</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 6. Passport Information Card -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-sky-100 border border-sky-200 flex items-center justify-center text-sky-600 text-base font-bold">
+            🛂
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Passport Information</h2>
+            <p class="text-xs text-slate-500">Enhanced Autofill identity document fields (<code class="font-mono text-sky-700">passport.html</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+          Passport Form
+        </span>
+      </div>
+
+      <form action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="passportNumber" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Passport Number:</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">#passportNumber</span>
+            </div>
+            <input
+              type="text"
+              id="passportNumber"
+              name="passportNumber"
+              placeholder="Passport Number"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="passportOwnerName" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Owner Name:</label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">#passportOwnerName</span>
+            </div>
+            <input
+              type="text"
+              id="passportOwnerName"
+              name="passportOwnerName"
+              placeholder="Owner Name"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="passportIssueDate" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Issue Date:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">#passportIssueDate</span>
+            </div>
+            <input
+              type="date"
+              id="passportIssueDate"
+              name="passportIssueDate"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="passportExpirationDate" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Expiration Date:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">#passportExpirationDate</span>
+            </div>
+            <input
+              type="date"
+              id="passportExpirationDate"
+              name="passportExpirationDate"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <div class="flex items-center justify-between gap-2">
+            <label for="passportCountryCode" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Country:</label>
+            <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 shrink-0">#passportCountryCode</span>
+          </div>
+          <input
+            type="text"
+            id="passportCountryCode"
+            name="passportCountryCode"
+            placeholder="Country"
+            class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-sky-500 focus:bg-white focus:ring-3 focus:ring-sky-500/15 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            formaction="?"
+            class="w-full py-2.5 px-5 rounded-xl bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-semibold text-sm shadow-md shadow-sky-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit Passport</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 7. Vehicle Information Card (4 rows of 2 columns) -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-teal-100 border border-teal-200 flex items-center justify-center text-teal-600 text-base font-bold">
+            🚗
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Vehicle Information</h2>
+            <p class="text-xs text-slate-500">Enhanced Autofill vehicle &amp; registration fields (<code class="font-mono text-teal-700">vehicle_information.html</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 border border-teal-200">
+          Vehicle Form
+        </span>
+      </div>
+
+      <form action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="vehicleOwner" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Vehicle Owner: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#vehicleOwner</span>
+            </div>
+            <input
+              type="text"
+              id="vehicleOwner"
+              name="vehicleOwner"
+              autocomplete="name"
+              placeholder="Vehicle Owner"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="vehicleMake" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Vehicle Make: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#vehicleMake</span>
+            </div>
+            <input
+              type="text"
+              id="vehicleMake"
+              name="vehicleMake"
+              placeholder="Vehicle Make"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="vehicleModel" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Vehicle Model: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#vehicleModel</span>
+            </div>
+            <input
+              type="text"
+              id="vehicleModel"
+              name="vehicleModel"
+              placeholder="Vehicle Model"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="vehicleYear" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Vehicle Year: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#vehicleYear</span>
+            </div>
+            <input
+              type="number"
+              id="vehicleYear"
+              name="vehicleYear"
+              placeholder="2025"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="vehicleVin" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                Vehicle VIN: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#vehicleVin</span>
+            </div>
+            <input
+              type="text"
+              id="vehicleVin"
+              name="vehicleVin"
+              placeholder="VIN"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="licensePlateNumber" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                License Plate Number: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#licensePlateNumber</span>
+            </div>
+            <input
+              type="text"
+              id="licensePlateNumber"
+              name="licensePlateNumber"
+              placeholder="Plate Number"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="licensePlateState" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                License Plate State: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#licensePlateState</span>
+            </div>
+            <input
+              type="text"
+              id="licensePlateState"
+              name="licensePlateState"
+              placeholder="State"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="licensePlateCountry" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">
+                License Plate Country: <span class="text-rose-500">*</span>
+              </label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-50 text-teal-700 border border-teal-200 shrink-0">#licensePlateCountry</span>
+            </div>
+            <input
+              type="text"
+              id="licensePlateCountry"
+              name="licensePlateCountry"
+              autocomplete="country"
+              placeholder="Country"
+              required
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:bg-white focus:ring-3 focus:ring-teal-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            formaction="?"
+            class="w-full py-2.5 px-5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-semibold text-sm shadow-md shadow-teal-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit Vehicle Info</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- 8. Flight Reservation Form Card (3 rows of 2 columns) -->
+    <section class="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-5 border-b border-slate-100 pb-4">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-violet-100 border border-violet-200 flex items-center justify-center text-violet-600 text-base font-bold">
+            ✈️
+          </div>
+          <div>
+            <h2 class="text-base font-bold text-slate-900">Flight Reservation Form</h2>
+            <p class="text-xs text-slate-500">Enhanced Autofill flight booking fields (<code class="font-mono text-violet-700">flight_reservation.html</code>)</p>
+          </div>
+        </div>
+        <span class="text-[11px] font-mono font-semibold px-2.5 py-1 rounded-full bg-violet-50 text-violet-700 border border-violet-200">
+          Flight Reservation
+        </span>
+      </div>
+
+      <form action="?" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="flightNumber" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Flight Number:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#flightNumber</span>
+            </div>
+            <input
+              type="text"
+              id="flightNumber"
+              name="flightNumber"
+              placeholder="e.g. UA 123"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="ticketNumber" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Ticket Number:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#ticketNumber</span>
+            </div>
+            <input
+              type="text"
+              id="ticketNumber"
+              name="ticketNumber"
+              placeholder="Ticket Number"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="confirmationCode" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Confirmation Code:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#confirmationCode</span>
+            </div>
+            <input
+              type="text"
+              id="confirmationCode"
+              name="confirmationCode"
+              placeholder="ABC123"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="passengerName" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Passenger Name:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#passengerName</span>
+            </div>
+            <input
+              type="text"
+              id="passengerName"
+              name="passengerName"
+              autocomplete="name"
+              placeholder="Passenger Name"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="departureAirport" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Departure Airport:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#departureAirport</span>
+            </div>
+            <input
+              type="text"
+              id="departureAirport"
+              name="departureAirport"
+              placeholder="SFO"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <div class="flex items-center justify-between gap-2">
+              <label for="arrivalAirport" class="text-xs font-semibold text-slate-700 uppercase tracking-wider whitespace-nowrap">Arrival Airport:</label>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-violet-50 text-violet-700 border border-violet-200 shrink-0">#arrivalAirport</span>
+            </div>
+            <input
+              type="text"
+              id="arrivalAirport"
+              name="arrivalAirport"
+              placeholder="JFK"
+              class="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-3.5 py-2.5 text-sm font-mono text-slate-900 placeholder-slate-400 focus:border-violet-500 focus:bg-white focus:ring-3 focus:ring-violet-500/15 focus:outline-none transition"
+            />
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button
+            type="submit"
+            formaction="?"
+            class="w-full py-2.5 px-5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-md shadow-violet-500/20 transition flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span>Submit Flight Reservation</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Bottom Info Banner -->
+    <div class="bg-gradient-to-r from-indigo-50 via-sky-50 to-emerald-50 border border-indigo-200/80 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-white border border-indigo-200 flex items-center justify-center text-indigo-600 text-base shadow-2xs">
+          ✨
+        </div>
+        <div>
+          <h3 class="text-xs font-bold text-slate-900">Browser Native Validation &amp; Enhanced Autofill Ready</h3>
+          <p class="text-xs text-slate-600 mt-0.5">
+            Includes Chat (<code class="font-mono text-purple-700">contenteditable</code>), Pure HTML5 Validation, Profile Autofill, Credit Card, Username/Password, Passport, Vehicle Information, and Flight Reservation test surfaces.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const ceEl = document.getElementById('chatContenteditable');
+    ceEl.addEventListener('input', () => {
+      if (ceEl.innerHTML === '<br>' || ceEl.innerText.trim() === '') {
+        if (ceEl.innerHTML !== '') ceEl.innerHTML = '';
+      }
+    });
+
+    document.getElementById('sendChatBtn').addEventListener('click', () => {
+      const queryVal = document.getElementById('chatQueryTextarea').value.trim();
+      const textVal = document.getElementById('chatTextInput').value.trim();
+      const ceVal = document.getElementById('chatContenteditable').innerText.trim();
+
+      const parts = [];
+      if (queryVal) parts.push(`[textarea]: ${queryVal}`);
+      if (textVal) parts.push(`[input]: ${textVal}`);
+      if (ceVal) parts.push(`[contenteditable]: ${ceVal}`);
+
+      const msg = parts.length > 0 ? parts.join(' | ') : 'Empty message';
+      const chatLog = document.getElementById('chatLog');
+      const bubble = document.createElement('div');
+      bubble.className = 'flex items-start justify-end gap-2';
+      bubble.innerHTML = `
+        <div class="bg-sky-600 text-white rounded-xl rounded-tr-none px-3 py-2 text-xs shadow-2xs max-w-xs break-words"></div>
+        <span class="h-6 w-6 rounded-full bg-sky-100 text-sky-700 border border-sky-200 text-[10px] flex items-center justify-center font-bold shrink-0">YOU</span>
+      `;
+      bubble.querySelector('div').textContent = msg;
+      chatLog.appendChild(bubble);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    });
+  </script>
+</body>
+</html>
